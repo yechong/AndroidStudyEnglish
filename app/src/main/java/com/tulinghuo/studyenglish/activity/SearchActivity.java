@@ -31,6 +31,8 @@ public class SearchActivity extends AppCompatActivity {
         TextView cancelTV = findViewById(R.id.cancel_tv);
         EditText searchET = findViewById(R.id.search_et);
 
+        searchET.requestFocus();
+
         cancelTV.setOnClickListener(v -> {
             finish();
         });
