@@ -42,7 +42,6 @@
                 android:layout_marginStart="5dp"
                 android:src="@drawable/search" />
 
-
         </RelativeLayout>
 
 
@@ -53,7 +52,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:text="@string/cancel"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
