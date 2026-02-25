@@ -6,12 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.tulinghuo.studyenglish.R;
+import com.tulinghuo.studyenglish.activity.BookListActivity;
 import com.tulinghuo.studyenglish.activity.SearchActivity;
 
 public class HomeFragment extends Fragment {
@@ -26,8 +28,7 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -36,8 +37,15 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         RelativeLayout searchBox = view.findViewById(R.id.search_box);
+        TextView addTaskTV = view.findViewById(R.id.add_task_tv);
+
         searchBox.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), SearchActivity.class);
+            startActivity(intent);
+        });
+
+        addTaskTV.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), BookListActivity.class);
             startActivity(intent);
         });
     }

@@ -5,4 +5,6 @@
     <string name="search">查询单词</string>
     <string name="cancel">取消</string>
     <string name="search_hint">输入需要查询的单词</string>
+    <string name="add_task">添加计划</string>
+    <string name="all_book">全部词书</string>
 </resources>
