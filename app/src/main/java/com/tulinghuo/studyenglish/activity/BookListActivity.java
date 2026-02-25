@@ -60,22 +60,22 @@ public class BookListActivity extends AppCompatActivity {
         BookCategoryAdapter adapter = new BookCategoryAdapter(bookCategoryList);
 
         // 设置点击事件
-//        adapter.setOnItemClickListener(position -> {
-//            BookCategory clickedItem = bookCategoryList.get(position);
-//            Toast.makeText(BookListActivity.this,
-//                    "点击了: " + clickedItem.getName(), Toast.LENGTH_SHORT).show();
-//        });
+        adapter.setOnItemClickListener(position -> {
+            BookCategory bookCategory = bookCategoryList.get(position);
+            Toast.makeText(BookListActivity.this, "点击了: " + bookCategory.getName(), Toast.LENGTH_SHORT).show();
+        });
 
         recyclerView.setAdapter(adapter);
     }
 
     private void prepareData() {
         bookCategoryList = new ArrayList<>();
-        BookCategory bookCategory1 = new BookCategory();
-        bookCategory1.setName("全部");
-        BookCategory bookCategory2 = new BookCategory();
-        bookCategory2.setName("热门");
-        bookCategoryList.add(bookCategory1);
-        bookCategoryList.add(bookCategory2);
+        bookCategoryList.add(new BookCategory("热门"));
+        bookCategoryList.add(new BookCategory("留学"));
+        bookCategoryList.add(new BookCategory("大学"));
+        bookCategoryList.add(new BookCategory("高中"));
+        bookCategoryList.add(new BookCategory("初中"));
+        bookCategoryList.add(new BookCategory("小学"));
+        bookCategoryList.add(new BookCategory("全部"));
     }
 }
