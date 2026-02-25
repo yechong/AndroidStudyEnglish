@@ -1,5 +1,7 @@
 package com.tulinghuo.studyenglish.adapter;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,19 +11,29 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.tulinghuo.studyenglish.R;
 import com.tulinghuo.studyenglish.model.BookCategory;
+import com.tulinghuo.studyenglish.util.HttpUtil;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class BookCategoryAdapter extends RecyclerView.Adapter<BookCategoryAdapter.ViewHolder> {
 
-    private List<BookCategory> bookCategoryList;
+    private Handler mainHandler = new Handler(Looper.getMainLooper());
+
+    private List<BookCategory> bookCategoryList = new LinkedList<>();
     private OnItemClickListener listener;
     private int selectedPosition = 0;  // 记录选中的位置
 
-    public BookCategoryAdapter(List<BookCategory> bookCategoryList) {
-        this.bookCategoryList = bookCategoryList;
+    public void setBookCategoryList(List<BookCategory> bookCategoryList) {
+        this.bookCategoryList.clear();
+        this.bookCategoryList.addAll(bookCategoryList);
+        mainHandler.post(() -> notifyDataSetChanged());
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -30,7 +42,7 @@ public class BookCategoryAdapter extends RecyclerView.Adapter<BookCategoryAdapte
 
     // 接口定义点击事件
     public interface OnItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(BookCategory bookCategory);
     }
 
     @NonNull
@@ -57,7 +69,7 @@ public class BookCategoryAdapter extends RecyclerView.Adapter<BookCategoryAdapte
             notifyItemChanged(selectedPosition);
 
             if (listener != null) {
-                listener.onItemClick(selectedPosition);
+                listener.onItemClick(bookCategoryList.get(selectedPosition));
             }
         });
     }
@@ -84,5 +96,29 @@ public class BookCategoryAdapter extends RecyclerView.Adapter<BookCategoryAdapte
             categoryNameTV.setText(item.getName());
             underLineV.setSelected(isSelected);
         }
+    }
+
+    public void loadCategoryList() {
+        Log.i("BookCategoryAdapter", "loadCategoryList");
+        HttpUtil.getAsync("/api_book.php?method=listCategory", new HttpUtil.HttpCallback() {
+            @Override
+            public void onSuccess(String response) {
+                Log.i("BookCategoryAdapter", response);
+                JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
+                JsonArray jsonArray = jsonObject.getAsJsonArray("data");
+                Gson gson = new Gson();
+                List<BookCategory> list = new LinkedList<>();
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JsonObject item = jsonArray.get(i).getAsJsonObject();
+                    list.add(gson.fromJson(item, BookCategory.class));
+                }
+                setBookCategoryList(list);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.i("BookCategoryAdapter", "error -> " + e.getMessage());
+            }
+        });
     }
 }

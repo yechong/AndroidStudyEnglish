@@ -17,15 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tulinghuo.studyenglish.R;
 import com.tulinghuo.studyenglish.adapter.BookCategoryAdapter;
 import com.tulinghuo.studyenglish.model.BookCategory;
+import com.tulinghuo.studyenglish.util.HttpUtil;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class BookListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-
-    private List<BookCategory> bookCategoryList;
+    private BookCategoryAdapter bookCategoryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,11 @@ public class BookListActivity extends AppCompatActivity {
             return insets;
         });
 
+        initViews();
+        prepareData();
+    }
+
+    private void initViews() {
         ImageView backIV = findViewById(R.id.back_iv);
         backIV.setOnClickListener(v -> finish());
 
@@ -49,33 +55,31 @@ public class BookListActivity extends AppCompatActivity {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(layoutManager);
 
-
         // 可选：优化性能
         recyclerView.setHasFixedSize(true);
 
-        // 准备数据
-        prepareData();
-
         // 设置Adapter
-        BookCategoryAdapter adapter = new BookCategoryAdapter(bookCategoryList);
+        bookCategoryAdapter = new BookCategoryAdapter();
 
         // 设置点击事件
-        adapter.setOnItemClickListener(position -> {
-            BookCategory bookCategory = bookCategoryList.get(position);
+        bookCategoryAdapter.setOnItemClickListener(bookCategory -> {
             Toast.makeText(BookListActivity.this, "点击了: " + bookCategory.getName(), Toast.LENGTH_SHORT).show();
         });
 
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(bookCategoryAdapter);
     }
 
     private void prepareData() {
-        bookCategoryList = new ArrayList<>();
-        bookCategoryList.add(new BookCategory("热门"));
-        bookCategoryList.add(new BookCategory("留学"));
-        bookCategoryList.add(new BookCategory("大学"));
-        bookCategoryList.add(new BookCategory("高中"));
-        bookCategoryList.add(new BookCategory("初中"));
-        bookCategoryList.add(new BookCategory("小学"));
-        bookCategoryList.add(new BookCategory("全部"));
+//        List<BookCategory> list = new LinkedList<>();
+//        list.add(new BookCategory("热门"));
+//        list.add(new BookCategory("留学"));
+//        list.add(new BookCategory("大学"));
+//        list.add(new BookCategory("高中"));
+//        list.add(new BookCategory("初中"));
+//        list.add(new BookCategory("小学"));
+//        list.add(new BookCategory("全部"));
+//        bookCategoryAdapter.setBookCategoryList(list);
+//        HttpUtil.getAsync();
+        bookCategoryAdapter.loadCategoryList();
     }
 }

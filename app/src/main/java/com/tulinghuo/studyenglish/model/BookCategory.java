@@ -2,13 +2,23 @@ package com.tulinghuo.studyenglish.model;
 
 public class BookCategory {
 
+    private int id;
     private String name;
 
     public BookCategory() {
     }
 
-    public BookCategory(String name) {
+    public BookCategory(int id, String name) {
+        this.id = id;
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
