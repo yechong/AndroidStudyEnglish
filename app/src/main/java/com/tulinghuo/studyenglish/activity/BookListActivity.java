@@ -1,9 +1,7 @@
 package com.tulinghuo.studyenglish.activity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -15,18 +13,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tulinghuo.studyenglish.R;
+import com.tulinghuo.studyenglish.adapter.BookAdapter;
 import com.tulinghuo.studyenglish.adapter.BookCategoryAdapter;
-import com.tulinghuo.studyenglish.model.BookCategory;
-import com.tulinghuo.studyenglish.util.HttpUtil;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class BookListActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
+    private RecyclerView bookCategoryListRecyclerView;
+    private RecyclerView bookListRecyclerView;
     private BookCategoryAdapter bookCategoryAdapter;
+    private BookAdapter bookAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,16 +42,21 @@ public class BookListActivity extends AppCompatActivity {
         ImageView backIV = findViewById(R.id.back_iv);
         backIV.setOnClickListener(v -> finish());
 
+        initBookCategoryListRecyclerView();
+        initBookListRecyclerView();
+    }
+
+    private void initBookCategoryListRecyclerView() {
         // 初始化RecyclerView
-        recyclerView = findViewById(R.id.recyclerView);
+        bookCategoryListRecyclerView = findViewById(R.id.book_category_list_recyclerView);
 
         // 设置布局管理器
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(layoutManager);
+        bookCategoryListRecyclerView.setLayoutManager(layoutManager);
 
         // 可选：优化性能
-        recyclerView.setHasFixedSize(true);
+        bookCategoryListRecyclerView.setHasFixedSize(true);
 
         // 设置Adapter
         bookCategoryAdapter = new BookCategoryAdapter();
@@ -66,20 +66,34 @@ public class BookListActivity extends AppCompatActivity {
             Toast.makeText(BookListActivity.this, "点击了: " + bookCategory.getName(), Toast.LENGTH_SHORT).show();
         });
 
-        recyclerView.setAdapter(bookCategoryAdapter);
+        bookCategoryListRecyclerView.setAdapter(bookCategoryAdapter);
+    }
+
+    private void initBookListRecyclerView() {
+        // 初始化RecyclerView
+        bookListRecyclerView = findViewById(R.id.book_list_recyclerView);
+
+        // 设置布局管理器
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        bookListRecyclerView.setLayoutManager(layoutManager);
+
+        // 可选：优化性能
+        bookListRecyclerView.setHasFixedSize(true);
+
+        // 设置Adapter
+        bookAdapter = new BookAdapter();
+
+        // 设置点击事件
+        bookAdapter.setOnItemClickListener(book -> {
+            Toast.makeText(BookListActivity.this, "点击了: " + book.getName(), Toast.LENGTH_SHORT).show();
+        });
+
+        bookListRecyclerView.setAdapter(bookAdapter);
     }
 
     private void prepareData() {
-//        List<BookCategory> list = new LinkedList<>();
-//        list.add(new BookCategory("热门"));
-//        list.add(new BookCategory("留学"));
-//        list.add(new BookCategory("大学"));
-//        list.add(new BookCategory("高中"));
-//        list.add(new BookCategory("初中"));
-//        list.add(new BookCategory("小学"));
-//        list.add(new BookCategory("全部"));
-//        bookCategoryAdapter.setBookCategoryList(list);
-//        HttpUtil.getAsync();
         bookCategoryAdapter.loadCategoryList();
+        bookAdapter.loadBookList();
     }
 }

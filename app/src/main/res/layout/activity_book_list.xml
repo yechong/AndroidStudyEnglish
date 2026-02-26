@@ -31,17 +31,25 @@
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="20dp"
-        android:id="@+id/recyclerView"
+        android:id="@+id/book_category_list_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_below="@id/tool_bar" />
+        android:layout_below="@id/tool_bar"
+        android:layout_marginTop="20dp" />
 
     <View
+        android:id="@+id/div_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_below="@id/recyclerView"
+        android:layout_below="@id/book_category_list_recyclerView"
         android:background="@color/top_line" />
 
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/book_list_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/div_line"
+        android:layout_marginTop="20dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp" />
 </RelativeLayout>
