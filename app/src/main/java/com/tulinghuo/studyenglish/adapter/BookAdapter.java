@@ -80,6 +80,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         private TextView titleTV;
         private TextView wordsTV;
         private TextView statusTV;
+        private View maskV;
         public View itemView;
 
         public ViewHolder(@NonNull View itemView) {
@@ -89,6 +90,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             titleTV = itemView.findViewById(R.id.title_tv);
             wordsTV = itemView.findViewById(R.id.words_tv);
             statusTV = itemView.findViewById(R.id.status_tv);
+            maskV = itemView.findViewById(R.id.mask_v);
         }
 
         public void bind(final Book book) {
@@ -96,8 +98,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             wordsTV.setText("共 " + book.getWords() + " 词");
 
             statusTV.setVisibility(View.GONE);
+            maskV.setVisibility(View.GONE);
             if (book.getIsUsed() == 1) {
                 statusTV.setVisibility(View.VISIBLE);
+                maskV.setVisibility(View.VISIBLE);
             }
 
             String imageUrl = book.getCover();
