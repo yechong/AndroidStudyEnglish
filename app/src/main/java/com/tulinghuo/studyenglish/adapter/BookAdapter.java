@@ -79,6 +79,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         private ImageView coverIV;
         private TextView titleTV;
         private TextView wordsTV;
+        private TextView statusTV;
         public View itemView;
 
         public ViewHolder(@NonNull View itemView) {
@@ -87,13 +88,19 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             coverIV = itemView.findViewById(R.id.cover_iv);
             titleTV = itemView.findViewById(R.id.title_tv);
             wordsTV = itemView.findViewById(R.id.words_tv);
+            statusTV = itemView.findViewById(R.id.status_tv);
         }
 
-        public void bind(final Book item) {
-            titleTV.setText(item.getName());
-            wordsTV.setText("共 " + item.getWords() + " 词");
+        public void bind(final Book book) {
+            titleTV.setText(book.getName());
+            wordsTV.setText("共 " + book.getWords() + " 词");
 
-            String imageUrl = item.getCover();
+            statusTV.setVisibility(View.GONE);
+            if (book.getIsUsed() == 1) {
+                statusTV.setVisibility(View.VISIBLE);
+            }
+
+            String imageUrl = book.getCover();
 
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 Glide.with(itemView.getContext())  // 使用 itemView 的 Context
@@ -104,7 +111,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                         .into(coverIV);                  // 设置到 ImageView
             } else {
                 // 如果没有图片 URL，可以设置一个默认图
-//                coverIV.setImageResource(R.drawable.ic_book_default);
+                coverIV.setImageResource(R.drawable.book);
             }
         }
     }

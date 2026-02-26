@@ -6,6 +6,7 @@ public class Book {
     private String name;
     private String cover;
     private int words;
+    private int isUsed;
 
     public int getId() {
         return id;
@@ -37,5 +38,13 @@ public class Book {
 
     public void setWords(int words) {
         this.words = words;
+    }
+
+    public int getIsUsed() {
+        return isUsed;
+    }
+
+    public void setIsUsed(int isUsed) {
+        this.isUsed = isUsed;
     }
 }

@@ -23,20 +23,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:text="四级真题核心词"
             android:paddingTop="10dp"
+            android:text="四级真题核心词"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/words_tv"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:textColor="@color/un_active"
-            android:text="共 1440 词"
-            android:paddingBottom="10dp"
-            android:textSize="12sp" />
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:id="@+id/words_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="共 1440 词"
+                android:textColor="@color/un_active"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/status_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="已添加"
+                android:textColor="@color/un_active"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
 
     </RelativeLayout>
 
