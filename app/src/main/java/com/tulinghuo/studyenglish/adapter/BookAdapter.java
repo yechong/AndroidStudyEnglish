@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -75,7 +76,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
         private ImageView coverIV;
         private TextView titleTV;
         private TextView wordsTV;
@@ -92,6 +92,20 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         public void bind(final Book item) {
             titleTV.setText(item.getName());
             wordsTV.setText("共 " + item.getWords() + " 词");
+
+            String imageUrl = item.getCover();
+
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                Glide.with(itemView.getContext())  // 使用 itemView 的 Context
+                        .load(imageUrl)                // 加载图片 URL
+//                        .placeholder(R.drawable.ic_book_placeholder) // 占位图（你需要准备这个资源）
+//                        .error(R.drawable.ic_book_error)             // 错误图（你需要准备这个资源）
+                        .centerCrop()                   // 图片裁剪方式，可根据需求调整
+                        .into(coverIV);                  // 设置到 ImageView
+            } else {
+                // 如果没有图片 URL，可以设置一个默认图
+//                coverIV.setImageResource(R.drawable.ic_book_default);
+            }
         }
     }
 
