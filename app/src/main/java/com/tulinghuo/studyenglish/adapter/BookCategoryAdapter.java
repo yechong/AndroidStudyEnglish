@@ -1,5 +1,6 @@
 package com.tulinghuo.studyenglish.adapter;
 
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -94,6 +96,12 @@ public class BookCategoryAdapter extends RecyclerView.Adapter<BookCategoryAdapte
 
         public void bind(final BookCategory item, boolean isSelected) {
             categoryNameTV.setText(item.getName());
+            categoryNameTV.setTypeface(Typeface.DEFAULT);
+            categoryNameTV.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.un_active));
+            if (isSelected) {
+                categoryNameTV.setTypeface(Typeface.DEFAULT_BOLD);
+                categoryNameTV.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.black2));
+            }
             underLineV.setSelected(isSelected);
         }
     }
