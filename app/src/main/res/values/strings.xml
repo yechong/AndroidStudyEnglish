@@ -7,4 +7,7 @@
     <string name="search_hint">输入需要查询的单词</string>
     <string name="add_task">添加计划</string>
     <string name="all_book">全部词书</string>
+    <string name="btn_start_task">开始学习该计划</string>
+    <string name="task_form_per_day_words">每天背单词</string>
+    <string name="task_finish_days">完成天数</string>
 </resources>

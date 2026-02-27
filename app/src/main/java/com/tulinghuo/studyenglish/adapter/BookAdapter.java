@@ -44,8 +44,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.book_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_list_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -120,9 +119,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         }
     }
 
-    public void loadBookList() {
+    public void loadBookList(int categoryId) {
         Log.i("BookAdapter", "loadBookList");
-        HttpUtil.getAsync("/api_book.php?method=listBook", new HttpUtil.HttpCallback() {
+        if (categoryId == -1) return;
+        HttpUtil.getAsync("/api_book.php?method=listBook&categoryId=" + categoryId, new HttpUtil.HttpCallback() {
             @Override
             public void onSuccess(String response) {
                 Log.i("BookAdapter", response);

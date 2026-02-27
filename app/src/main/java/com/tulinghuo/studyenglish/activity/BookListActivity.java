@@ -1,6 +1,8 @@
 package com.tulinghuo.studyenglish.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -15,6 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tulinghuo.studyenglish.R;
 import com.tulinghuo.studyenglish.adapter.BookAdapter;
 import com.tulinghuo.studyenglish.adapter.BookCategoryAdapter;
+import com.tulinghuo.studyenglish.event.BookCategoryChangeEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class BookListActivity extends AppCompatActivity {
 
@@ -37,6 +44,26 @@ public class BookListActivity extends AppCompatActivity {
         initViews();
         prepareData();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdateEvent(BookCategoryChangeEvent event) {
+        int categoryId = event.getCategoryId();
+        Log.i("BookAdapter", "收到 BookCategoryChangeEvent");
+        bookAdapter.loadBookList(categoryId);
+    }
+
 
     private void initViews() {
         ImageView backIV = findViewById(R.id.back_iv);
@@ -63,7 +90,7 @@ public class BookListActivity extends AppCompatActivity {
 
         // 设置点击事件
         bookCategoryAdapter.setOnItemClickListener(bookCategory -> {
-            Toast.makeText(BookListActivity.this, "点击了: " + bookCategory.getName(), Toast.LENGTH_SHORT).show();
+            EventBus.getDefault().post(new BookCategoryChangeEvent(bookCategory.getId()));
         });
 
         bookCategoryListRecyclerView.setAdapter(bookCategoryAdapter);
@@ -86,7 +113,13 @@ public class BookListActivity extends AppCompatActivity {
 
         // 设置点击事件
         bookAdapter.setOnItemClickListener(book -> {
-            Toast.makeText(BookListActivity.this, "点击了: " + book.getName(), Toast.LENGTH_SHORT).show();
+            if (book.getIsUsed() == 1) {
+                Toast.makeText(BookListActivity.this, "该词书已添加", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Intent intent = new Intent(BookListActivity.this, CreateTaskActivity.class);
+                startActivity(intent);
+            }
         });
 
         bookListRecyclerView.setAdapter(bookAdapter);
@@ -94,6 +127,5 @@ public class BookListActivity extends AppCompatActivity {
 
     private void prepareData() {
         bookCategoryAdapter.loadCategoryList();
-        bookAdapter.loadBookList();
     }
 }

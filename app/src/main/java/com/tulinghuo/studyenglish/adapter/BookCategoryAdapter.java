@@ -18,8 +18,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tulinghuo.studyenglish.R;
+import com.tulinghuo.studyenglish.event.BookCategoryChangeEvent;
 import com.tulinghuo.studyenglish.model.BookCategory;
 import com.tulinghuo.studyenglish.util.HttpUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -121,6 +124,9 @@ public class BookCategoryAdapter extends RecyclerView.Adapter<BookCategoryAdapte
                     list.add(gson.fromJson(item, BookCategory.class));
                 }
                 setBookCategoryList(list);
+                if (!list.isEmpty()) {
+                    EventBus.getDefault().post(new BookCategoryChangeEvent(list.get(0).getId()));
+                }
             }
 
             @Override
