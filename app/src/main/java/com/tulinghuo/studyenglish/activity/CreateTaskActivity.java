@@ -9,6 +9,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -58,8 +59,27 @@ public class CreateTaskActivity extends AppCompatActivity {
         TextView wordsTV = findViewById(R.id.words_tv);
         endDateTV = findViewById(R.id.end_date_tv);
         minuteTV = findViewById(R.id.minute_tv);
+        TextView createTaskTV = findViewById(R.id.create_task_tv);
 
         backIV.setOnClickListener(v -> finish());
+
+        createTaskTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(CreateTaskActivity.this)
+                        .setTitle("提示")
+                        .setMessage("确认创建该计划吗？")
+                        .setPositiveButton("确定", (dialog, which) -> {
+
+                            dialog.dismiss();
+                            finish();
+                        })
+                        .setNegativeButton("取消", (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
+            }
+        });
 
         int words = 0;
         if (book != null) {

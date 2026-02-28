@@ -184,6 +184,7 @@
             android:padding="20dp">
 
             <TextView
+                android:id="@+id/create_task_tv"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/button_common_selector"
