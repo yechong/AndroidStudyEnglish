@@ -1,5 +1,7 @@
 package com.tulinghuo.studyenglish.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -7,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -16,14 +19,19 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.tulinghuo.studyenglish.R;
 import com.tulinghuo.studyenglish.model.Book;
 import com.tulinghuo.studyenglish.util.ConstantUtil;
 import com.tulinghuo.studyenglish.util.DateUtil;
+import com.tulinghuo.studyenglish.util.HttpUtil;
+import com.tulinghuo.studyenglish.vo.HttpResponseVO;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class CreateTaskActivity extends AppCompatActivity {
 
@@ -34,6 +42,10 @@ public class CreateTaskActivity extends AppCompatActivity {
     private List<Integer> finishDaysList;
     private Spinner perDayWordsSpinner;
     private Spinner finishDaysSpinner;
+
+    private AlertDialog dialog;
+
+    private int perDayWords = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,18 +78,21 @@ public class CreateTaskActivity extends AppCompatActivity {
         createTaskTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(CreateTaskActivity.this)
-                        .setTitle("提示")
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateTaskActivity.this);
+                builder.setTitle("提示")
                         .setMessage("确认创建该计划吗？")
-                        .setPositiveButton("确定", (dialog, which) -> {
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                doCreateTask();
+                            }
+                        })
+                        .setNegativeButton("取消", null);  // 如果不需要处理取消逻辑，可以设为null
 
-                            dialog.dismiss();
-                            finish();
-                        })
-                        .setNegativeButton("取消", (dialog, which) -> {
-                            dialog.dismiss();
-                        })
-                        .show();
+                dialog = builder.create();
+                dialog.setCancelable(false);  // 设置点击对话框外部或返回键是否可以取消
+                dialog.setCanceledOnTouchOutside(false);  // 设置点击对话框外部是否取消
+                dialog.show();
             }
         });
 
@@ -101,16 +116,15 @@ public class CreateTaskActivity extends AppCompatActivity {
             wordsTV.setText("共 " + words + " 词");
         }
 
-        int defaultPerDayWords = 20;
-        int defaultFinishDays = ConstantUtil.calculateDays(words, defaultPerDayWords);
+        int defaultFinishDays = ConstantUtil.calculateDays(words, perDayWords);
 
-        initPerDayWordsSpinnerView(words, defaultPerDayWords);
+        initPerDayWordsSpinnerView(words);
         initFinishDaysSpinnerView(words, defaultFinishDays);
 
-        calculateDateAndMinutes(words, defaultPerDayWords);
+        calculateDateAndMinutes(words);
     }
 
-    private void calculateDateAndMinutes(int words, int perDayWords) {
+    private void calculateDateAndMinutes(int words) {
         perDayWords = Math.min(words, perDayWords);
         int days = (words + perDayWords - 1) / perDayWords;
         String dateStr = DateUtil.formatDateByPattern(DateUtil.addDays(new Date(), days), "yyyy年MM月dd");
@@ -120,14 +134,14 @@ public class CreateTaskActivity extends AppCompatActivity {
         minuteTV.setText("预计每天" + minutes + "分钟");
     }
 
-    private void initPerDayWordsSpinnerView(int words, int defaultPerDayWords) {
+    private void initPerDayWordsSpinnerView(int words) {
         int defaultPosition = 0;
         perDayWordsList = new LinkedList<>();
         List<String> perDayWordsContentList = new LinkedList<>();
         for (int i = 5, index = 0; i <= 100; i += 5, index++) {
             perDayWordsList.add(i);
             perDayWordsContentList.add(i + "个");
-            if (i == defaultPerDayWords) defaultPosition = index;
+            if (i == perDayWords) defaultPosition = index;
         }
         ArrayAdapter<String> perDayWordsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, perDayWordsContentList);
         perDayWordsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -147,7 +161,7 @@ public class CreateTaskActivity extends AppCompatActivity {
                     }
                 }
                 finishDaysSpinner.setSelection(finishDaysPosition);
-                calculateDateAndMinutes(words, perDayWords);
+                calculateDateAndMinutes(words);
             }
 
             @Override
@@ -174,7 +188,7 @@ public class CreateTaskActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int finishDays = finishDaysList.get(position);
-                int perDayWords = ConstantUtil.calculatePerDayWords(words, finishDays);
+                perDayWords = ConstantUtil.calculatePerDayWords(words, finishDays);
                 int perDayWordsPosition = 0;
                 for (int i = 0; i < perDayWordsList.size(); i++) {
                     if (perDayWordsList.get(i) == perDayWords) {
@@ -183,11 +197,47 @@ public class CreateTaskActivity extends AppCompatActivity {
                     }
                 }
                 perDayWordsSpinner.setSelection(perDayWordsPosition);
-                calculateDateAndMinutes(words, perDayWords);
+                calculateDateAndMinutes(words);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
+    private void doCreateTask() {
+        Map<String, String> params = new HashMap<>();
+        params.put("bookid", String.valueOf(book.getId()));
+        params.put("perDayWords", String.valueOf(perDayWords));
+        HttpUtil.postFormDataAsync("/api_book.php?method=createTask", params, new HttpUtil.HttpCallback() {
+            @Override
+            public void onSuccess(String response) {
+//                Log.i("CreateTaskActivity", response);
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                Gson gson = new Gson();
+                HttpResponseVO responseVO = gson.fromJson(response, HttpResponseVO.class);
+                if (!responseVO.isRequestSuccess()) {
+                    runOnUiThread(() -> Toast.makeText(CreateTaskActivity.this, responseVO.getMsg(), Toast.LENGTH_SHORT).show());
+                }
+                else {
+                    Intent intent = new Intent(CreateTaskActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    runOnUiThread(() -> {
+                        startActivity(intent);
+                        finish();
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(CreateTaskActivity.this, "创建失败", Toast.LENGTH_SHORT).show();
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
             }
         });
     }

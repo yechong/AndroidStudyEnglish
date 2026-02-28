@@ -1,7 +1,5 @@
 package com.tulinghuo.studyenglish.util;
 
-import okhttp3.*;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -9,6 +7,16 @@ import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class HttpUtil {
     private static final int CONNECT_TIMEOUT = 30;
@@ -19,7 +27,7 @@ public class HttpUtil {
     private static Gson gson;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-//    private static final String BASE_URL = "http://local.studyenglish.club";
+    //    private static final String BASE_URL = "http://local.studyenglish.club";
     private static final String BASE_URL = "https://study.tulinghuo.com";
 
     // 初始化OkHttpClient和Gson
@@ -55,7 +63,8 @@ public class HttpUtil {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful() && response.body() != null) {
                 return response.body().string();
-            } else {
+            }
+            else {
                 throw new IOException("请求失败，状态码：" + response.code());
             }
         }
@@ -88,7 +97,8 @@ public class HttpUtil {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful() && response.body() != null) {
                 return response.body().string();
-            } else {
+            }
+            else {
                 throw new IOException("请求失败，状态码：" + response.code());
             }
         }
@@ -117,7 +127,8 @@ public class HttpUtil {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onSuccess(response.body().string());
-                } else {
+                }
+                else {
                     callback.onFailure(new IOException("请求失败，状态码：" + response.code()));
                 }
                 response.close();
@@ -144,7 +155,8 @@ public class HttpUtil {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful() && response.body() != null) {
                 return response.body().string();
-            } else {
+            }
+            else {
                 throw new IOException("请求失败，状态码：" + response.code());
             }
         }
@@ -201,7 +213,8 @@ public class HttpUtil {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onSuccess(response.body().string());
-                } else {
+                }
+                else {
                     callback.onFailure(new IOException("请求失败，状态码：" + response.code()));
                 }
                 response.close();
@@ -219,6 +232,59 @@ public class HttpUtil {
     public static void postJsonAsync(String url, Object object, final HttpCallback callback) {
         String jsonBody = gson.toJson(object);
         postJsonAsync(url, jsonBody, callback);
+    }
+
+    /**
+     * 异步发送 POST form-data 表单请求
+     *
+     * @param url      请求地址
+     * @param params   表单参数键值对
+     * @param callback 回调接口
+     */
+    public static void postFormDataAsync(String url, Map<String, String> params, final HttpCallback callback) {
+        // 构建 multipart form-data 请求体
+        MultipartBody.Builder multipartBuilder = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM);
+
+        // 添加表单参数
+        if (params != null && !params.isEmpty()) {
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                if (key != null && value != null) {
+                    // 添加文本表单字段
+                    multipartBuilder.addFormDataPart(key, value);
+                }
+            }
+        }
+
+        RequestBody body = multipartBuilder.build();
+
+        // 构建请求
+        Request request = new Request.Builder()
+                .url(buildUrl(url))
+                .post(body)
+                .addHeader("Content-Type", MultipartBody.FORM.toString())
+                .build();
+
+        // 发送异步请求
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onFailure(e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body().string());
+                }
+                else {
+                    callback.onFailure(new IOException("请求失败，状态码：" + response.code()));
+                }
+                response.close();
+            }
+        });
     }
 
     /**
@@ -247,7 +313,8 @@ public class HttpUtil {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful() && response.body() != null) {
                 return response.body().string();
-            } else {
+            }
+            else {
                 throw new IOException("请求失败，状态码：" + response.code());
             }
         }
