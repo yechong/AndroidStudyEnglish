@@ -1,6 +1,10 @@
 package com.tulinghuo.studyenglish.model;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
+
+    private static final long serialVersionUID = 2522679424038754888L;
 
     private int id;
     private String name;

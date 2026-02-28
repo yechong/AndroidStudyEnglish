@@ -104,15 +104,15 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             }
 
             String imageUrl = book.getCover();
-
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 Glide.with(itemView.getContext())  // 使用 itemView 的 Context
                         .load(imageUrl)                // 加载图片 URL
-//                        .placeholder(R.drawable.ic_book_placeholder) // 占位图（你需要准备这个资源）
-//                        .error(R.drawable.ic_book_error)             // 错误图（你需要准备这个资源）
+                        .placeholder(R.drawable.book) // 占位图（你需要准备这个资源）
+                        .error(R.drawable.book)             // 错误图（你需要准备这个资源）
                         .centerCrop()                   // 图片裁剪方式，可根据需求调整
                         .into(coverIV);                  // 设置到 ImageView
-            } else {
+            }
+            else {
                 // 如果没有图片 URL，可以设置一个默认图
                 coverIV.setImageResource(R.drawable.book);
             }

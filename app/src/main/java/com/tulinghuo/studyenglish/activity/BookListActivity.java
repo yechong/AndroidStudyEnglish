@@ -118,6 +118,7 @@ public class BookListActivity extends AppCompatActivity {
             }
             else {
                 Intent intent = new Intent(BookListActivity.this, CreateTaskActivity.class);
+                intent.putExtra("book", book);
                 startActivity(intent);
             }
         });
