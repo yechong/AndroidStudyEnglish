@@ -24,6 +24,7 @@ import com.tulinghuo.studyenglish.util.HttpUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class BookCategoryAdapter extends RecyclerView.Adapter<BookCategoryAdapte
 
     private Handler mainHandler = new Handler(Looper.getMainLooper());
 
-    private List<BookCategory> bookCategoryList = new LinkedList<>();
+    private List<BookCategory> bookCategoryList = new ArrayList<>();
     private OnItemClickListener listener;
     private int selectedPosition = 0;  // 记录选中的位置
 

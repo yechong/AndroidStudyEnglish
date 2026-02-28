@@ -5,7 +5,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="top_line">#E0E0E0</color>
     <color name="un_active">#AAAAAA</color>
+    <color name="gray">#60646A</color>
     <color name="app_bg">#F8F8F8</color>
     <color name="blue1">#353CDE</color>
     <color name="blue2">#3C63F8</color>
+    <color name="blue3">#E8ECFC</color>
 </resources>

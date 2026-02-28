@@ -21,12 +21,13 @@ import com.tulinghuo.studyenglish.R;
 import com.tulinghuo.studyenglish.model.Book;
 import com.tulinghuo.studyenglish.util.HttpUtil;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
-    private List<Book> bookList = new LinkedList<>();
+    private List<Book> bookList = new ArrayList<>();
 
     private Handler mainHandler = new Handler(Looper.getMainLooper());
     private OnItemClickListener listener;
@@ -35,9 +36,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         bookList.add(new Book());
     }
 
-    public void setBookList(List<Book> bookList) {
+    public void setBookList(List<Book> list) {
         this.bookList.clear();
-        this.bookList.addAll(bookList);
+        this.bookList.addAll(list);
         mainHandler.post(() -> notifyDataSetChanged());
     }
 
