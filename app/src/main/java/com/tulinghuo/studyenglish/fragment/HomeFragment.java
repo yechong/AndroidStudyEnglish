@@ -2,6 +2,7 @@ package com.tulinghuo.studyenglish.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,15 @@ import com.tulinghuo.studyenglish.R;
 import com.tulinghuo.studyenglish.activity.BookListActivity;
 import com.tulinghuo.studyenglish.activity.SearchActivity;
 import com.tulinghuo.studyenglish.adapter.TaskListAdapter;
+import com.tulinghuo.studyenglish.event.TaskListEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class HomeFragment extends Fragment {
 
+    private TextView addTaskTV;
     private RecyclerView taskListRecycleView;
     private TaskListAdapter taskListAdapter;
 
@@ -31,6 +38,18 @@ public class HomeFragment extends Fragment {
         args.putString("message", message);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 
     @Override
@@ -45,9 +64,17 @@ public class HomeFragment extends Fragment {
         prepareData();
     }
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onTaskListEvent(TaskListEvent event) {
+        Log.i("HomeFragment", "onTaskListEvent");
+        if (!event.existData()) {
+            addTaskTV.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void initViews() {
         RelativeLayout searchBox = getView().findViewById(R.id.search_box);
-        TextView addTaskTV = getView().findViewById(R.id.add_task_tv);
+        addTaskTV = getView().findViewById(R.id.add_task_tv);
         addTaskTV.setVisibility(View.GONE);
 
         searchBox.setOnClickListener(v -> {
