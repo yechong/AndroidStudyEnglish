@@ -28,6 +28,7 @@ import org.greenrobot.eventbus.ThreadMode;
 public class HomeFragment extends Fragment {
 
     private TextView addTaskTV;
+    private TextView add_task_float_tv;
     private RecyclerView taskListRecycleView;
     private TaskListAdapter taskListAdapter;
 
@@ -67,7 +68,10 @@ public class HomeFragment extends Fragment {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onTaskListEvent(TaskListEvent event) {
         Log.i("HomeFragment", "onTaskListEvent");
-        if (!event.existData()) {
+        if (event.existData()) {
+            add_task_float_tv.setVisibility(View.VISIBLE);
+        }
+        else {
             addTaskTV.setVisibility(View.VISIBLE);
         }
     }
@@ -75,7 +79,10 @@ public class HomeFragment extends Fragment {
     private void initViews() {
         RelativeLayout searchBox = getView().findViewById(R.id.search_box);
         addTaskTV = getView().findViewById(R.id.add_task_tv);
+        add_task_float_tv = getView().findViewById(R.id.add_task_float_tv);
+
         addTaskTV.setVisibility(View.GONE);
+        add_task_float_tv.setVisibility(View.GONE);
 
         searchBox.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), SearchActivity.class);
@@ -83,6 +90,10 @@ public class HomeFragment extends Fragment {
         });
 
         addTaskTV.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), BookListActivity.class);
+            startActivity(intent);
+        });
+        add_task_float_tv.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), BookListActivity.class);
             startActivity(intent);
         });
