@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".activity.LoginActivity">
+    tools:context=".activity.LoginCodeActivity">
 
     <RelativeLayout
         android:id="@+id/tool_bar"
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/login"
+            android:text="验证邮箱"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -42,18 +42,48 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="邮箱地址登录"
+            android:text="输入6位验证码"
             android:textSize="28sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title"
-            android:layout_marginTop="5dp"
-            android:text="首次邮箱地址登录将在验证后生成新的账号"
-            android:textColor="@color/gray"
-            android:textSize="12sp" />
+            android:layout_below="@id/title">
+
+            <TextView
+                android:id="@+id/info1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="5dp"
+                android:text="验证码已发送至"
+                android:textColor="@color/gray"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@id/info1"
+                android:text="240542223@qq.com"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:text="重新发送"
+                android:textColor="@color/blue2"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <LinearLayout
@@ -70,8 +100,8 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:gravity="center_vertical"
-            android:hint="请输入邮箱地址"
-            android:inputType="textEmailAddress"
+            android:hint="请输入验证码"
+            android:inputType="number"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:textSize="20sp" />
@@ -83,7 +113,6 @@
             android:background="@color/top_line" />
 
         <TextView
-            android:id="@+id/send_code"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="20dp"
@@ -91,8 +120,7 @@
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
-            android:maxLength="6"
-            android:text="发送邮箱验证码"
+            android:text="登录"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />

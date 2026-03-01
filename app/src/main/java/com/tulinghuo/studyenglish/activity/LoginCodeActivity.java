@@ -1,10 +1,7 @@
 package com.tulinghuo.studyenglish.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,31 +11,23 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.tulinghuo.studyenglish.R;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginCodeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login_code);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
         initViews();
     }
 
     private void initViews() {
         ImageView backIV = findViewById(R.id.back_iv);
-        TextView send_code = findViewById(R.id.send_code);
-
         backIV.setOnClickListener(v -> finish());
-
-        send_code.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, LoginCodeActivity.class);
-            startActivity(intent);
-        });
     }
 }
