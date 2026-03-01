@@ -11,4 +11,5 @@
     <string name="task_form_per_day_words">每天背单词</string>
     <string name="task_finish_days">完成天数</string>
     <string name="login_text">立即登录</string>
+    <string name="login">登录</string>
 </resources>
