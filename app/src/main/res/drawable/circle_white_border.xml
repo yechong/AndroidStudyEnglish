@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <!-- 白色背景 -->
+    <solid android:color="#FFFFFF" />
+
+    <!-- 可选：添加边框 -->
+    <stroke
+        android:width="2dp"
+        android:color="#FFFFFF" />
+
+    <!-- 确保内容不被裁剪 -->
+    <padding
+        android:top="2dp"
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp" />
+
+</shape>
