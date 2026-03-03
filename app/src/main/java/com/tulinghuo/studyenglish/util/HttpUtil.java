@@ -3,6 +3,7 @@ package com.tulinghuo.studyenglish.util;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.tulinghuo.studyenglish.MyApp;
 
 import java.io.IOException;
 import java.util.Map;
@@ -58,6 +59,7 @@ public class HttpUtil {
                 .url(buildUrl(url))
                 .get()
                 .addHeader("Content-Type", "application/json")
+                .addHeader("token", MyApp.getTokenManager().getToken())
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -92,6 +94,7 @@ public class HttpUtil {
                 .url(finalUrl)
                 .get()
                 .addHeader("Content-Type", "application/json")
+                .addHeader("token", MyApp.getTokenManager().getToken())
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -115,6 +118,7 @@ public class HttpUtil {
                 .url(buildUrl(url))
                 .get()
                 .addHeader("Content-Type", "application/json")
+                .addHeader("token", MyApp.getTokenManager().getToken())
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -150,6 +154,7 @@ public class HttpUtil {
                 .url(buildUrl(url))
                 .post(body)
                 .addHeader("Content-Type", "application/json")
+                .addHeader("token", MyApp.getTokenManager().getToken())
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -201,6 +206,7 @@ public class HttpUtil {
                 .url(buildUrl(url))
                 .post(body)
                 .addHeader("Content-Type", "application/json")
+                .addHeader("token", MyApp.getTokenManager().getToken())
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -265,6 +271,7 @@ public class HttpUtil {
                 .url(buildUrl(url))
                 .post(body)
                 .addHeader("Content-Type", MultipartBody.FORM.toString())
+                .addHeader("token", MyApp.getTokenManager().getToken())
                 .build();
 
         // 发送异步请求
@@ -308,6 +315,7 @@ public class HttpUtil {
             }
         }
 
+        requestBuilder.addHeader("token", MyApp.getTokenManager().getToken());
         Request request = requestBuilder.build();
 
         try (Response response = client.newCall(request).execute()) {

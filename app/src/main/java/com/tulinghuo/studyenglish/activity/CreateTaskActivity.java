@@ -22,7 +22,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.tulinghuo.studyenglish.R;
 import com.tulinghuo.studyenglish.model.Book;
-import com.tulinghuo.studyenglish.util.ConstantUtil;
+import com.tulinghuo.studyenglish.util.CommonUtil;
 import com.tulinghuo.studyenglish.util.DateUtil;
 import com.tulinghuo.studyenglish.util.HttpUtil;
 import com.tulinghuo.studyenglish.vo.HttpResponseVO;
@@ -116,7 +116,7 @@ public class CreateTaskActivity extends AppCompatActivity {
             wordsTV.setText("共 " + words + " 词");
         }
 
-        int defaultFinishDays = ConstantUtil.calculateDays(words, perDayWords);
+        int defaultFinishDays = CommonUtil.calculateDays(words, perDayWords);
 
         initPerDayWordsSpinnerView(words);
         initFinishDaysSpinnerView(words, defaultFinishDays);
@@ -152,7 +152,7 @@ public class CreateTaskActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int perDayWords = perDayWordsList.get(position);
-                int finishDays = ConstantUtil.calculateDays(words, perDayWords);
+                int finishDays = CommonUtil.calculateDays(words, perDayWords);
                 int finishDaysPosition = 0;
                 for (int i = 0; i < finishDaysList.size(); i++) {
                     if (finishDaysList.get(i) == finishDays) {
@@ -188,7 +188,7 @@ public class CreateTaskActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int finishDays = finishDaysList.get(position);
-                perDayWords = ConstantUtil.calculatePerDayWords(words, finishDays);
+                perDayWords = CommonUtil.calculatePerDayWords(words, finishDays);
                 int perDayWordsPosition = 0;
                 for (int i = 0; i < perDayWordsList.size(); i++) {
                     if (perDayWordsList.get(i) == perDayWords) {
