@@ -47,6 +47,7 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        prepareData();
     }
 
     @Override
@@ -64,7 +65,6 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews();
-        prepareData();
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -72,8 +72,10 @@ public class HomeFragment extends Fragment {
         Log.i("HomeFragment", "onTaskListEvent");
         if (event.existData()) {
             add_task_float_tv.setVisibility(View.VISIBLE);
+            addTaskTV.setVisibility(View.GONE);
         }
         else {
+            add_task_float_tv.setVisibility(View.GONE);
             addTaskTV.setVisibility(View.VISIBLE);
         }
     }
