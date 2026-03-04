@@ -33,6 +33,17 @@ public class CommonUtil {
         }).start();
     }
 
+    /**
+     * 将dp值转换为px值
+     *
+     * @param context 上下文
+     * @param dp      dp值
+     * @return px值
+     */
+    public static int dpToPx(Context context, float dp) {
+        return (int) (dp * context.getResources().getDisplayMetrics().density + 0.5f);
+    }
+
     public static boolean isLogin(Context context) {
         String token = MyApp.getTokenManager().getToken();
         return !isBlank(token);

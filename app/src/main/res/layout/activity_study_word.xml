@@ -51,6 +51,7 @@
         android:paddingEnd="15dp">
 
         <TextView
+            android:id="@+id/word_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -69,6 +70,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/usphone_ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
@@ -91,6 +93,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/usphone_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="/reɪn/"
@@ -98,6 +101,7 @@
                 android:textSize="16sp" />
 
             <LinearLayout
+                android:id="@+id/ukphone_ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -121,6 +125,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/ukphone_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="/reɪn/"
@@ -131,6 +136,7 @@
 
         <!-- 单词释义 -->
         <LinearLayout
+            android:id="@+id/translate_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
@@ -154,6 +160,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
@@ -175,32 +182,11 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:text="v."
-                    android:textColor="@color/un_active"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="下雨；（使）大量降落，雨点般落下；（使）如雨般地猛击"
-                    android:textColor="@color/black2"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
         </LinearLayout>
 
         <!-- 词根助记 -->
         <LinearLayout
+            android:id="@+id/rem_method_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
@@ -224,6 +210,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/rem_method_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ac ＋ cess(去) → 来去要走通道 → 通道"
