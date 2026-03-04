@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tulinghuo.studyenglish.R;
 import com.tulinghuo.studyenglish.event.BookCategoryChangeEvent;
+import com.tulinghuo.studyenglish.event.StudyWordEvent;
 import com.tulinghuo.studyenglish.event.TaskListEvent;
 import com.tulinghuo.studyenglish.model.Task;
 import com.tulinghuo.studyenglish.util.HttpUtil;
@@ -72,6 +73,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         private TextView today_review_words;
         private TextView today_total_review_words;
 
+        private TextView study;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.itemView = itemView;
@@ -83,6 +86,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             today_total_new_words = itemView.findViewById(R.id.today_total_new_words);
             today_review_words = itemView.findViewById(R.id.today_review_words);
             today_total_review_words = itemView.findViewById(R.id.today_total_review_words);
+            study = itemView.findViewById(R.id.study);
         }
 
         public void bind(final Task task) {
@@ -109,6 +113,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
                 // 如果没有图片 URL，可以设置一个默认图
                 cover_iv.setImageResource(R.drawable.book);
             }
+
+            study.setOnClickListener(v -> EventBus.getDefault().post(new StudyWordEvent(task.getId())));
         }
     }
 

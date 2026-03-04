@@ -160,6 +160,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/study"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/button_common_selector"

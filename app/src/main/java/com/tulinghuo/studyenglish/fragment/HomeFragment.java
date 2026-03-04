@@ -19,7 +19,9 @@ import com.tulinghuo.studyenglish.R;
 import com.tulinghuo.studyenglish.activity.BookListActivity;
 import com.tulinghuo.studyenglish.activity.LoginActivity;
 import com.tulinghuo.studyenglish.activity.SearchActivity;
+import com.tulinghuo.studyenglish.activity.StudyWordActivity;
 import com.tulinghuo.studyenglish.adapter.TaskListAdapter;
+import com.tulinghuo.studyenglish.event.StudyWordEvent;
 import com.tulinghuo.studyenglish.event.TaskListEvent;
 import com.tulinghuo.studyenglish.util.CommonUtil;
 
@@ -78,6 +80,14 @@ public class HomeFragment extends Fragment {
             add_task_float_tv.setVisibility(View.GONE);
             addTaskTV.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onStudyWordEvent(StudyWordEvent event) {
+        Log.i("HomeFragment", "onStudyWordEvent");
+        Intent intent = new Intent(getActivity(), StudyWordActivity.class);
+        intent.putExtra("taskId", event.getTaskId());
+        startActivity(intent);
     }
 
     private void initViews() {

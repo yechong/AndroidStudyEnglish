@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StudyEnglish">
         <activity
+            android:name=".activity.StudyWordActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.LoginCodeActivity"
             android:exported="false" />
         <activity
