@@ -17,9 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.tulinghuo.studyenglish.R;
 import com.tulinghuo.studyenglish.activity.BookListActivity;
+import com.tulinghuo.studyenglish.activity.LoginActivity;
 import com.tulinghuo.studyenglish.activity.SearchActivity;
 import com.tulinghuo.studyenglish.adapter.TaskListAdapter;
 import com.tulinghuo.studyenglish.event.TaskListEvent;
+import com.tulinghuo.studyenglish.util.CommonUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -90,8 +92,14 @@ public class HomeFragment extends Fragment {
         });
 
         addTaskTV.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), BookListActivity.class);
-            startActivity(intent);
+            if (CommonUtil.isLogin(getContext())) {
+                Intent intent = new Intent(getActivity(), BookListActivity.class);
+                startActivity(intent);
+            }
+            else {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+            }
         });
         add_task_float_tv.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), BookListActivity.class);

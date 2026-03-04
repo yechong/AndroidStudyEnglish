@@ -1,5 +1,9 @@
 package com.tulinghuo.studyenglish.util;
 
+import android.content.Context;
+
+import com.tulinghuo.studyenglish.MyApp;
+
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,6 +31,11 @@ public class CommonUtil {
                 }
             }
         }).start();
+    }
+
+    public static boolean isLogin(Context context) {
+        String token = MyApp.getTokenManager().getToken();
+        return !isBlank(token);
     }
 
     public static boolean isBlank(String str) {

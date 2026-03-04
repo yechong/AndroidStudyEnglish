@@ -234,10 +234,12 @@ public class CreateTaskActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(CreateTaskActivity.this, "创建失败", Toast.LENGTH_SHORT).show();
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                runOnUiThread(() -> {
+                    Toast.makeText(CreateTaskActivity.this, "创建失败", Toast.LENGTH_SHORT).show();
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
     }

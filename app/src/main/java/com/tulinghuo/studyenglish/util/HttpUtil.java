@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -248,29 +249,43 @@ public class HttpUtil {
      * @param callback 回调接口
      */
     public static void postFormDataAsync(String url, Map<String, String> params, final HttpCallback callback) {
-        // 构建 multipart form-data 请求体
-        MultipartBody.Builder multipartBuilder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM);
+        RequestBody body;
 
-        // 添加表单参数
-        if (params != null && !params.isEmpty()) {
+        // 检查是否有参数
+        if (params == null || params.isEmpty()) {
+            // 如果没有参数，使用空的 FormBody 或者直接返回错误
+            body = new FormBody.Builder().build(); // 或者使用其他类型的空请求体
+        }
+        else {
+            // 构建 multipart form-data 请求体
+            MultipartBody.Builder multipartBuilder = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM);
+
+            boolean hasValidParam = false;
+
+            // 添加表单参数
             for (Map.Entry<String, String> entry : params.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
                 if (key != null && value != null) {
-                    // 添加文本表单字段
                     multipartBuilder.addFormDataPart(key, value);
+                    hasValidParam = true;
                 }
             }
-        }
 
-        RequestBody body = multipartBuilder.build();
+            // 如果没有有效参数，使用空的 FormBody
+            if (!hasValidParam) {
+                body = new FormBody.Builder().build();
+            }
+            else {
+                body = multipartBuilder.build();
+            }
+        }
 
         // 构建请求
         Request request = new Request.Builder()
                 .url(buildUrl(url))
                 .post(body)
-                .addHeader("Content-Type", MultipartBody.FORM.toString())
                 .addHeader("token", MyApp.getTokenManager().getToken())
                 .build();
 
