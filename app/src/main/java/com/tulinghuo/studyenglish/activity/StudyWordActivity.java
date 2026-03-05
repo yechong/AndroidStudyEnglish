@@ -13,11 +13,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 import com.tulinghuo.studyenglish.R;
+import com.tulinghuo.studyenglish.adapter.WordSentenceAdapter;
+import com.tulinghuo.studyenglish.fragment.component.WordSentenceFragment;
 import com.tulinghuo.studyenglish.fragment.component.WordTranslateFragment;
 import com.tulinghuo.studyenglish.util.CommonUtil;
 import com.tulinghuo.studyenglish.util.HttpUtil;
@@ -40,6 +44,7 @@ public class StudyWordActivity extends AppCompatActivity {
     private LinearLayout translate_ll;
     private LinearLayout rem_method_ll;
     private TextView rem_method_tv;
+    private ViewPager2 sentence_vp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,11 +134,7 @@ public class StudyWordActivity extends AppCompatActivity {
                 ukphone_tv.setText("/" + wordVO.getUkphone() + "/");
             }
 
-            if (wordVO.getTranslationList() != null && !wordVO.getTranslationList().isEmpty()) {
-                for (WordVO.TranslationVO translationVO : wordVO.getTranslationList()) {
-                    createTranslateViews(translate_ll.getId(), translationVO.getPos(), translationVO.getTranslation());
-                }
-            }
+            createTranslateViews();
 
             if (!CommonUtil.isBlank(wordVO.getRemMethod())) {
                 rem_method_ll.setVisibility(View.VISIBLE);
@@ -142,13 +143,35 @@ public class StudyWordActivity extends AppCompatActivity {
             else {
                 rem_method_ll.setVisibility(View.GONE);
             }
+
+            createSentenceViews();
         });
     }
 
-    private void createTranslateViews(int containerViewId, String pos, String translation) {
-        WordTranslateFragment fragment = WordTranslateFragment.newInstance(pos, translation);
-        getSupportFragmentManager().beginTransaction()
-                .add(containerViewId, fragment)
-                .commit();
+    private void createTranslateViews() {
+        if (wordVO.getTranslationList() == null || wordVO.getTranslationList().isEmpty()) {
+            translate_ll.setVisibility(View.GONE);
+            return;
+        }
+        for (WordVO.TranslationVO vo : wordVO.getTranslationList()) {
+            WordTranslateFragment fragment = WordTranslateFragment.newInstance(vo.getPos(), vo.getTranslation());
+            getSupportFragmentManager().beginTransaction().add(translate_ll.getId(), fragment).commit();
+        }
     }
+
+    private void createSentenceViews() {
+        sentence_vp = findViewById(R.id.sentence_vp);
+        DotsIndicator dotsIndicator = findViewById(R.id.dotsIndicator);
+        if (wordVO.getSentenceList() == null || wordVO.getSentenceList().isEmpty()) {
+            sentence_vp.setVisibility(View.GONE);
+            return;
+        }
+        WordSentenceAdapter adapter = new WordSentenceAdapter(this);
+        for (WordVO.SentenceVO vo : wordVO.getSentenceList()) {
+            adapter.addFragment(WordSentenceFragment.newInstance(vo.getContent(), vo.getTranslation()));
+        }
+        sentence_vp.setAdapter(adapter);
+        dotsIndicator.attachTo(sentence_vp);
+    }
+
 }

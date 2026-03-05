@@ -44,7 +44,7 @@ public class WordTranslateFragment extends Fragment {
         TextView pos_tv = view.findViewById(R.id.pos_tv);
         TextView translate_tv = view.findViewById(R.id.translate_tv);
 
-        pos_tv.setText(pos);
+        pos_tv.setText(pos + ".");
         translate_tv.setText(translation);
 
         return view;

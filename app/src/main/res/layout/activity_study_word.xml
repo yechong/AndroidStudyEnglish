@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -50,6 +51,7 @@
         android:paddingStart="15dp"
         android:paddingEnd="15dp">
 
+        <!-- 单词 -->
         <TextView
             android:id="@+id/word_name"
             android:layout_width="wrap_content"
@@ -57,7 +59,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
             android:text="rain"
-            android:textColor="@color/black2"
+            android:textColor="@color/black"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -74,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
-                android:background="@color/top_line"
+                android:background="@color/gray2"
                 android:gravity="center"
                 android:paddingStart="2dp"
                 android:paddingEnd="2dp">
@@ -106,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="5dp"
-                android:background="@color/top_line"
+                android:background="@color/gray2"
                 android:gravity="center"
                 android:paddingStart="2dp"
                 android:paddingEnd="2dp">
@@ -148,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:background="@color/top_line"
+                android:background="@color/gray2"
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp">
 
@@ -177,7 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:background="@color/top_line"
+                android:background="@color/gray2"
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp">
 
@@ -193,9 +195,50 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ac ＋ cess(去) → 来去要走通道 → 通道"
-                android:textColor="@color/black2"
+                android:textColor="@color/black"
                 android:textSize="14sp" />
 
+        </LinearLayout>
+
+        <!-- 例句 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_bg"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/gray2"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="例句"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/sentence_vp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                android:id="@+id/dotsIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                app:dotsColor="@color/gray2"
+                app:dotsSize="8dp"
+                app:dotsSpacing="4dp"
+                app:selectedDotColor="@color/gray" />
         </LinearLayout>
 
     </LinearLayout>
