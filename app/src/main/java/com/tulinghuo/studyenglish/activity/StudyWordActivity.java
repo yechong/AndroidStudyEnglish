@@ -1,9 +1,7 @@
 package com.tulinghuo.studyenglish.activity;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,7 +10,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -21,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tulinghuo.studyenglish.R;
+import com.tulinghuo.studyenglish.fragment.component.WordTranslateFragment;
 import com.tulinghuo.studyenglish.util.CommonUtil;
 import com.tulinghuo.studyenglish.util.HttpUtil;
 import com.tulinghuo.studyenglish.util.MediaPlayerUtils;
@@ -133,7 +131,7 @@ public class StudyWordActivity extends AppCompatActivity {
 
             if (wordVO.getTranslationList() != null && !wordVO.getTranslationList().isEmpty()) {
                 for (WordVO.TranslationVO translationVO : wordVO.getTranslationList()) {
-                    translate_ll.addView(createTranslateViews(translationVO.getPos(), translationVO.getTranslation()));
+                    createTranslateViews(translate_ll.getId(), translationVO.getPos(), translationVO.getTranslation());
                 }
             }
 
@@ -147,44 +145,10 @@ public class StudyWordActivity extends AppCompatActivity {
         });
     }
 
-    private LinearLayout createTranslateViews(String pos, String translation) {
-// 创建外层LinearLayout
-        LinearLayout linearLayout = new LinearLayout(this);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        layoutParams.setMargins(0, CommonUtil.dpToPx(this, 10), 0, 0); // android:layout_marginTop="10dp"
-        linearLayout.setLayoutParams(layoutParams);
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL); // LinearLayout默认就是horizontal，但明确设置一下
-
-// 创建第一个TextView（序号）
-        TextView tvNumber = new TextView(this);
-        LinearLayout.LayoutParams tvNumberParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        tvNumberParams.setMargins(0, 0, CommonUtil.dpToPx(this, 4), 0); // android:layout_marginRight="4dp"
-        tvNumber.setLayoutParams(tvNumberParams);
-        tvNumber.setText(pos + ".");
-        tvNumber.setTextColor(ContextCompat.getColor(this, R.color.un_active));
-        tvNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        tvNumber.setTypeface(tvNumber.getTypeface(), Typeface.BOLD); // android:textStyle="bold"
-
-// 创建第二个TextView（内容）
-        TextView tvContent = new TextView(this);
-        LinearLayout.LayoutParams tvContentParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        tvContent.setLayoutParams(tvContentParams);
-        tvContent.setText(translation);
-        tvContent.setTextColor(ContextCompat.getColor(this, R.color.black2));
-        tvContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-
-// 将两个TextView添加到LinearLayout
-        linearLayout.addView(tvNumber);
-        linearLayout.addView(tvContent);
-        return linearLayout;
+    private void createTranslateViews(int containerViewId, String pos, String translation) {
+        WordTranslateFragment fragment = WordTranslateFragment.newInstance(pos, translation);
+        getSupportFragmentManager().beginTransaction()
+                .add(containerViewId, fragment)
+                .commit();
     }
 }
