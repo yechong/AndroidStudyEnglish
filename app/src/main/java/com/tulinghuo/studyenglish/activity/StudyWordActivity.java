@@ -21,6 +21,7 @@ import com.google.gson.JsonParser;
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 import com.tulinghuo.studyenglish.R;
 import com.tulinghuo.studyenglish.adapter.WordSentenceAdapter;
+import com.tulinghuo.studyenglish.fragment.component.WordPhraseFragment;
 import com.tulinghuo.studyenglish.fragment.component.WordSentenceFragment;
 import com.tulinghuo.studyenglish.fragment.component.WordTranslateFragment;
 import com.tulinghuo.studyenglish.util.CommonUtil;
@@ -44,7 +45,12 @@ public class StudyWordActivity extends AppCompatActivity {
     private LinearLayout translate_ll;
     private LinearLayout rem_method_ll;
     private TextView rem_method_tv;
-    private ViewPager2 sentence_vp;
+    private LinearLayout phrase_nav_ll;
+    private LinearLayout rel_word_nav_ll;
+    private LinearLayout syno_nav_ll;
+    private LinearLayout multiply_content_ll;
+
+    private WordPhraseFragment wordPhraseFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +79,10 @@ public class StudyWordActivity extends AppCompatActivity {
         translate_ll = findViewById(R.id.translate_ll);
         rem_method_ll = findViewById(R.id.rem_method_ll);
         rem_method_tv = findViewById(R.id.rem_method_tv);
+        phrase_nav_ll = findViewById(R.id.phrase_nav_ll);
+        rel_word_nav_ll = findViewById(R.id.rel_word_nav_ll);
+        syno_nav_ll = findViewById(R.id.syno_nav_ll);
+        multiply_content_ll = findViewById(R.id.multiply_content_ll);
 
         back_iv.setOnClickListener(v -> {
             finish();
@@ -83,6 +93,27 @@ public class StudyWordActivity extends AppCompatActivity {
         });
         ukphone_ll.setOnClickListener(v -> {
             mediaPlayerUtils.play(wordVO.getUkspeech());
+        });
+
+        phrase_nav_ll.setSelected(true);
+        rel_word_nav_ll.setSelected(false);
+        syno_nav_ll.setSelected(false);
+
+        phrase_nav_ll.setOnClickListener(v -> {
+            phrase_nav_ll.setSelected(true);
+            rel_word_nav_ll.setSelected(false);
+            syno_nav_ll.setSelected(false);
+            getSupportFragmentManager().beginTransaction().replace(multiply_content_ll.getId(), wordPhraseFragment).commit();
+        });
+        rel_word_nav_ll.setOnClickListener(v -> {
+            phrase_nav_ll.setSelected(false);
+            rel_word_nav_ll.setSelected(true);
+            syno_nav_ll.setSelected(false);
+        });
+        syno_nav_ll.setOnClickListener(v -> {
+            phrase_nav_ll.setSelected(false);
+            rel_word_nav_ll.setSelected(false);
+            syno_nav_ll.setSelected(true);
         });
     }
 
@@ -145,6 +176,7 @@ public class StudyWordActivity extends AppCompatActivity {
             }
 
             createSentenceViews();
+            createPhraseViews();
         });
     }
 
@@ -160,7 +192,7 @@ public class StudyWordActivity extends AppCompatActivity {
     }
 
     private void createSentenceViews() {
-        sentence_vp = findViewById(R.id.sentence_vp);
+        ViewPager2 sentence_vp = findViewById(R.id.sentence_vp);
         DotsIndicator dotsIndicator = findViewById(R.id.dotsIndicator);
         if (wordVO.getSentenceList() == null || wordVO.getSentenceList().isEmpty()) {
             sentence_vp.setVisibility(View.GONE);
@@ -174,4 +206,11 @@ public class StudyWordActivity extends AppCompatActivity {
         dotsIndicator.attachTo(sentence_vp);
     }
 
+    private void createPhraseViews() {
+        if (wordVO.getPhraseList() == null || wordVO.getPhraseList().isEmpty()) {
+            return;
+        }
+        wordPhraseFragment = WordPhraseFragment.newInstance(wordVO);
+        getSupportFragmentManager().beginTransaction().add(multiply_content_ll.getId(), wordPhraseFragment).commit();
+    }
 }
