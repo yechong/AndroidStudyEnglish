@@ -72,6 +72,9 @@ public class WordPhraseFragment extends Fragment {
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             ));
+            LinearLayout.LayoutParams textViewChineseLayoutParams = (LinearLayout.LayoutParams) textViewChinese.getLayoutParams();
+            textViewChineseLayoutParams.topMargin = CommonUtil.dpToPx(getContext(), 2);
+            textViewChinese.setLayoutParams(textViewChineseLayoutParams);
             textViewChinese.setText(vo.getTranslation());
             textViewChinese.setTextColor(ContextCompat.getColor(getContext(), R.color.gray));
             textViewChinese.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);

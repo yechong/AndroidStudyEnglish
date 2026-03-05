@@ -22,6 +22,7 @@ import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 import com.tulinghuo.studyenglish.R;
 import com.tulinghuo.studyenglish.adapter.WordSentenceAdapter;
 import com.tulinghuo.studyenglish.fragment.component.WordPhraseFragment;
+import com.tulinghuo.studyenglish.fragment.component.WordRelWordFragment;
 import com.tulinghuo.studyenglish.fragment.component.WordSentenceFragment;
 import com.tulinghuo.studyenglish.fragment.component.WordTranslateFragment;
 import com.tulinghuo.studyenglish.util.CommonUtil;
@@ -51,6 +52,7 @@ public class StudyWordActivity extends AppCompatActivity {
     private LinearLayout multiply_content_ll;
 
     private WordPhraseFragment wordPhraseFragment;
+    private WordRelWordFragment wordRelWordFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +111,7 @@ public class StudyWordActivity extends AppCompatActivity {
             phrase_nav_ll.setSelected(false);
             rel_word_nav_ll.setSelected(true);
             syno_nav_ll.setSelected(false);
+            getSupportFragmentManager().beginTransaction().replace(multiply_content_ll.getId(), wordRelWordFragment).commit();
         });
         syno_nav_ll.setOnClickListener(v -> {
             phrase_nav_ll.setSelected(false);
@@ -211,6 +214,7 @@ public class StudyWordActivity extends AppCompatActivity {
             return;
         }
         wordPhraseFragment = WordPhraseFragment.newInstance(wordVO);
+        wordRelWordFragment = WordRelWordFragment.newInstance(wordVO);
         getSupportFragmentManager().beginTransaction().add(multiply_content_ll.getId(), wordPhraseFragment).commit();
     }
 }
