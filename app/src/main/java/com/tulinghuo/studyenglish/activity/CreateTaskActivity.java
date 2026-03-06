@@ -210,7 +210,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("bookid", String.valueOf(book.getId()));
         params.put("perDayWords", String.valueOf(perDayWords));
-        HttpUtil.postFormDataAsync("/api_book.php?method=createTask", params, new HttpUtil.HttpCallback() {
+        HttpUtil.postFormDataAsync("/api_task.php?method=createTask", params, new HttpUtil.HttpCallback() {
             @Override
             public void onSuccess(String response) {
 //                Log.i("CreateTaskActivity", response);

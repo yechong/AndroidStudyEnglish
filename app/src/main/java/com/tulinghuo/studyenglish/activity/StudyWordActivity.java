@@ -1,5 +1,6 @@
 package com.tulinghuo.studyenglish.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
@@ -31,12 +33,22 @@ import com.tulinghuo.studyenglish.util.HttpUtil;
 import com.tulinghuo.studyenglish.util.MediaPlayerUtils;
 import com.tulinghuo.studyenglish.vo.HttpResponseVO;
 import com.tulinghuo.studyenglish.vo.WordVO;
+import com.xiasuhuei321.loadingdialog.view.LoadingDialog;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class StudyWordActivity extends AppCompatActivity {
 
-    private int wordId;
+    private int index = 0;
+    private int taskId;
+    private List<Integer> wordList = new ArrayList<>();
     private WordVO wordVO;
+    private boolean isLoadingNext = false;
 
+    private LoadingDialog loadingDialog;
     private MediaPlayerUtils mediaPlayerUtils;
 
     private TextView word_name;
@@ -51,6 +63,7 @@ public class StudyWordActivity extends AppCompatActivity {
     private LinearLayout rel_word_nav_ll;
     private LinearLayout syno_nav_ll;
     private LinearLayout multiply_content_ll;
+    private TextView next_tv;
 
     private WordPhraseFragment wordPhraseFragment;
     private WordRelWordFragment wordRelWordFragment;
@@ -59,6 +72,15 @@ public class StudyWordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        taskId = intent.getIntExtra("taskId", 0);
+
+        createActivityViews();
+        initViews();
+        loadWordList();
+    }
+
+    private void createActivityViews() {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_study_word);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -66,9 +88,6 @@ public class StudyWordActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        initViews();
-        loadWord();
     }
 
     private void initViews() {
@@ -87,6 +106,7 @@ public class StudyWordActivity extends AppCompatActivity {
         rel_word_nav_ll = findViewById(R.id.rel_word_nav_ll);
         syno_nav_ll = findViewById(R.id.syno_nav_ll);
         multiply_content_ll = findViewById(R.id.multiply_content_ll);
+        next_tv = findViewById(R.id.next_tv);
 
         back_iv.setOnClickListener(v -> {
             finish();
@@ -121,10 +141,40 @@ public class StudyWordActivity extends AppCompatActivity {
             syno_nav_ll.setSelected(true);
             getSupportFragmentManager().beginTransaction().replace(multiply_content_ll.getId(), wordSynoFragment).commit();
         });
+
+        next_tv.setOnClickListener(v -> {
+            showNext();
+        });
     }
 
-    private void loadWord() {
-        wordId = 1;
+    private void loadWordList() {
+        loadingDialog = new LoadingDialog(this);
+        loadingDialog.setLoadingText("加载数据中，请稍后...");
+        loadingDialog.show();
+
+        wordList.clear();
+        Map<String, String> params = new HashMap<>();
+        params.put("taskid", String.valueOf(taskId));
+        HttpUtil.postFormDataAsync("/api_task.php?method=startNewWord", params, new HttpUtil.HttpCallback() {
+            @Override
+            public void onSuccess(String response) {
+                Log.i("StudyWordActivity", "loadWordList -> " + response);
+                JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
+                JsonArray jsonArray = jsonObject.getAsJsonArray("data");
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    wordList.add(jsonArray.get(i).getAsInt());
+                }
+                loadWord(wordList.get(index));
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                runOnUiThread(loadingDialog::close);
+            }
+        });
+    }
+
+    private void loadWord(int wordId) {
         HttpUtil.getAsync("/api_word.php?method=detail&id=" + wordId, new HttpUtil.HttpCallback() {
             @Override
             public void onSuccess(String response) {
@@ -139,11 +189,13 @@ public class StudyWordActivity extends AppCompatActivity {
                     Log.i("StudyWordActivity", "wordVO -> " + gson.toJson(wordVO));
                     updateWordView();
                 }
+                isLoadingNext = false;
             }
 
             @Override
             public void onFailure(Exception e) {
-
+                runOnUiThread(loadingDialog::close);
+                isLoadingNext = false;
             }
         });
     }
@@ -182,7 +234,13 @@ public class StudyWordActivity extends AppCompatActivity {
             }
 
             createSentenceViews();
-            createPhraseViews();
+
+            wordPhraseFragment = WordPhraseFragment.newInstance(wordVO);
+            wordRelWordFragment = WordRelWordFragment.newInstance(wordVO);
+            wordSynoFragment = WordSynoFragment.newInstance(wordVO);
+            getSupportFragmentManager().beginTransaction().add(multiply_content_ll.getId(), wordPhraseFragment).commit();
+
+            loadingDialog.close();
         });
     }
 
@@ -212,13 +270,20 @@ public class StudyWordActivity extends AppCompatActivity {
         dotsIndicator.attachTo(sentence_vp);
     }
 
-    private void createPhraseViews() {
-        if (wordVO.getPhraseList() == null || wordVO.getPhraseList().isEmpty()) {
-            return;
+    private void showNext() {
+        if (isLoadingNext) return;
+        isLoadingNext = true;
+        index++;
+        if (index >= wordList.size()) {
+            index = 0;
         }
-        wordPhraseFragment = WordPhraseFragment.newInstance(wordVO);
-        wordRelWordFragment = WordRelWordFragment.newInstance(wordVO);
-        wordSynoFragment = WordSynoFragment.newInstance(wordVO);
-        getSupportFragmentManager().beginTransaction().add(multiply_content_ll.getId(), wordPhraseFragment).commit();
+//        loadingDialog.show();
+
+        createActivityViews();
+        wordPhraseFragment = null;
+        wordRelWordFragment = null;
+        wordSynoFragment = null;
+        initViews();
+        loadWord(wordList.get(index));
     }
 }

@@ -1,6 +1,7 @@
 package com.tulinghuo.studyenglish.fragment.component;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,9 +62,10 @@ public class WordSynoFragment extends Fragment {
 
             TextView textViewVt = new TextView(getContext());
             textViewVt.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    CommonUtil.dpToPx(getContext(), 25),
                     LinearLayout.LayoutParams.WRAP_CONTENT
             ));
+            textViewVt.setGravity(Gravity.END);
             textViewVt.setText(vo.getPos() + ".");
             textViewVt.setTextSize(15); // sp单位
             textViewVt.setTextColor(ContextCompat.getColor(getContext(), R.color.gray3));

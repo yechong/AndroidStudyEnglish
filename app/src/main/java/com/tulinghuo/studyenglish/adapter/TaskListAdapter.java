@@ -120,7 +120,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
     public void loadTaskList() {
         Log.i("TaskListAdapter", "loadTaskList");
-        HttpUtil.getAsync("/api_book.php?method=listTask", new HttpUtil.HttpCallback() {
+        HttpUtil.getAsync("/api_task.php?method=listTask", new HttpUtil.HttpCallback() {
             @Override
             public void onSuccess(String response) {
                 Log.i("TaskListAdapter", response);

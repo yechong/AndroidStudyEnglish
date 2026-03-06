@@ -1,5 +1,7 @@
 package com.tulinghuo.studyenglish.util;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -129,14 +131,19 @@ public class HttpUtil {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body().string());
+            public void onResponse(Call call, Response response) {
+                try {
+                    if (response.isSuccessful() && response.body() != null) {
+                        callback.onSuccess(response.body().string());
+                    }
+                    else {
+                        callback.onFailure(new IOException("请求失败，状态码：" + response.code()));
+                    }
+                    response.close();
                 }
-                else {
-                    callback.onFailure(new IOException("请求失败，状态码：" + response.code()));
+                catch (Exception e) {
+                    Log.i("HttpUtil", " " + e.getMessage());
                 }
-                response.close();
             }
         });
     }
