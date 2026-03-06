@@ -44,6 +44,10 @@ public class CommonUtil {
         return (int) (dp * context.getResources().getDisplayMetrics().density + 0.5f);
     }
 
+    public static int spToPx(Context context, float sp) {
+        return (int) (sp * context.getResources().getDisplayMetrics().scaledDensity);
+    }
+
     public static boolean isLogin(Context context) {
         String token = MyApp.getTokenManager().getToken();
         return !isBlank(token);
